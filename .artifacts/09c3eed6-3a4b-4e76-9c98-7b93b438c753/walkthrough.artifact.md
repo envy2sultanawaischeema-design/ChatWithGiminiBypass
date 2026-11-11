@@ -1,14 +1,11 @@
-# Walkthrough - Dedicated Copy and Share Buttons in Chat Item Layout
+# Walkthrough - Fixing Keyboard Insets Overlay Issue
 
-We have added explicit **📋 Copy** and **📤 Share** buttons directly below every chat message bubble in `item_chat_message.xml` and wired them up in `ChatAdapter.kt` for instant access.
+We have updated the window insets listener in `MainActivity.kt` to include `WindowInsetsCompat.Type.ime()` (the software keyboard height). When the keyboard opens, the layout correctly adjusts and pushes the bottom input bar above the keyboard instead of being hidden underneath it.
 
 ## Changes
 
-### UI & Layouts
-- **[item_chat_message.xml](file:///C:/Users/Awais/AndroidStudioProjects/ChatWithGiminiBypass/app/src/main/res/layout/item_chat_message.xml)**: Added horizontal action bar with Copy and Share buttons under each message bubble.
-
-### Adapter Logic
-- **[ChatAdapter.kt](file:///C:/Users/Awais/AndroidStudioProjects/ChatWithGiminiBypass/app/src/main/java/com/example/chatwithgiminibypass/ChatAdapter.kt)**: Bound click listeners for Copy (ClipboardManager) and Share (Intent.ACTION_SEND).
+### Activity & Logic
+- **[MainActivity.kt](file:///C:/Users/Awais/AndroidStudioProjects/ChatWithGiminiBypass/app/src/main/java/com/example/chatwithgiminibypass/MainActivity.kt)**: Included `imeInsets` in `setOnApplyWindowInsetsListener` to ensure proper bottom padding adjustment when the keyboard opens.
 
 ## Verification Results
 

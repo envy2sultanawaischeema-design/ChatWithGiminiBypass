@@ -41,7 +41,13 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                maxOf(systemBars.bottom, imeInsets.bottom)
+            )
             insets
         }
 
@@ -116,27 +122,14 @@ class MainActivity : AppCompatActivity() {
 
                 // 3. Inject prompt into background WebView
                 val escapedText = text.replace("'", "\\'")
-                val jsCode = """
-                    (function() {
-                        var el = document.querySelector('rich-textarea p') || document.querySelector('div[contenteditable="true"]');
-                        if (el) {
-                            el.innerText = '$escapedText';
-                            el.dispatchEvent(new Event('input', { bubbles: true }));
-                            setTimeout(function() {
-                                var sendBtn = document.querySelector('button.send-button') || document.querySelector('button[aria-label*="Send"]');
-                                if (sendBtn) sendBtn.click();
-                            }, 500);
-                        }
-                    })();
-                """.trimIndent()
-
+                val jsCode = currentProvider.promptJs.replace("PROMPT_TEXT", escapedText)
                 binding.webViewGemini.evaluateJavascript(jsCode, null)
 
                 // 4. Get initial response elements count in DOM, then poll for new elements
                 val getCountJs = "document.querySelectorAll('.model-response-text, message-content, .markdown, model-response p, div[data-message-id]').length;"
                 binding.webViewGemini.evaluateJavascript(getCountJs) { countStr ->
                     val initialCount = countStr?.toIntOrNull() ?: 0
-                    pollForResponse(attemptsLeft = 30, initialCount = initialCount)
+                    pollForResponse(attemptsLeft = 35, initialCount = initialCount)
                 }
             }
         }
@@ -202,9 +195,11 @@ class MainActivity : AppCompatActivity() {
             (function() {
                 var elements = document.querySelectorAll('.model-response-text, message-content, .markdown, model-response p, div[data-message-id]');
                 if (elements.length > $initialCount) {
-                    var text = elements[elements.length - 1].innerText;
-                    if (text && text.trim().length > 0) {
-                        return text;
+                    var el = elements[elements.length - 1];
+                    var contentEl = el.querySelector('.markdown') || el.querySelector('.model-response-text') || el;
+                    var html = contentEl.innerHTML;
+                    if (html && html.trim().length > 0) {
+                        return html;
                     }
                 }
                 return "";
@@ -225,11 +220,12 @@ class MainActivity : AppCompatActivity() {
                 dbHelper.insertMessage(aiMessage, currentProvider.displayName)
                 binding.recyclerViewMessages.scrollToPosition(messageList.size - 1)
             } else if (attemptsLeft > 0) {
-                // Poll again in 300ms until the new response element appears
-                handler.postDelayed({ pollForResponse(attemptsLeft - 1, initialCount) }, 800)
+                // Poll again in 1 second until the new response element appears
+                handler.postDelayed({ pollForResponse(attemptsLeft - 1, initialCount) }, 1000)
             } else {
                 chatAdapter.removeLastMessage()
-                Toast.makeText(this, "Response timeout on ${currentProvider.displayName}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Response timeout on ${currentProvider.displayName}", Toast.LENGTH_LONG).show(
+                )
             }
         }
     }
