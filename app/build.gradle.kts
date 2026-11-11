@@ -41,5 +41,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
-    implementation("com.github.YourUsername:ChatWithGiminiBypass:1.0.0")
 }
