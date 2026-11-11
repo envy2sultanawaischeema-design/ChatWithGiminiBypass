@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     id("maven-publish")
 }
 
 android {
     namespace = "com.example.chatwithgiminibypass"
-    compileSdk = 37
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -25,6 +26,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
     }
     buildFeatures {
         viewBinding = true
