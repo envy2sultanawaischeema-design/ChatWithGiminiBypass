@@ -1,5 +1,6 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
+    id("maven-publish")
 }
 
 android {
@@ -7,20 +8,18 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.example.chatwithgiminibypass"
         minSdk = 24
-        targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
-            optimization {
-                enable = false
-            }
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -29,6 +28,24 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.github.envy2sultanawaischeema-design"
+                artifactId = "ChatWithGiminiBypass"
+                version = "1.0.0"
+            }
+        }
     }
 }
 
