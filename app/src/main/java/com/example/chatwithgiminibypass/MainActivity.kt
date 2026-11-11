@@ -197,9 +197,9 @@ class MainActivity : AppCompatActivity() {
                 if (elements.length > $initialCount) {
                     var el = elements[elements.length - 1];
                     var contentEl = el.querySelector('.markdown') || el.querySelector('.model-response-text') || el;
-                    var html = contentEl.innerHTML;
-                    if (html && html.trim().length > 0) {
-                        return html;
+                    var text = contentEl.innerText;
+                    if (text && text.trim().length > 0) {
+                        return text;
                     }
                 }
                 return "";
@@ -224,8 +224,7 @@ class MainActivity : AppCompatActivity() {
                 handler.postDelayed({ pollForResponse(attemptsLeft - 1, initialCount) }, 1000)
             } else {
                 chatAdapter.removeLastMessage()
-                Toast.makeText(this, "Response timeout on ${currentProvider.displayName}", Toast.LENGTH_LONG).show(
-                )
+                Toast.makeText(this, "Response timeout on ${currentProvider.displayName}", Toast.LENGTH_LONG).show()
             }
         }
     }
