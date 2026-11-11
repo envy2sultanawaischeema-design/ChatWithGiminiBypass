@@ -1,7 +1,8 @@
 package com.example.chatwithgiminibypass
 
 data class ChatMessage(
-    val text: String,
+    var text: String,
     val isUser: Boolean,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    var isLoading: Boolean = false
 )

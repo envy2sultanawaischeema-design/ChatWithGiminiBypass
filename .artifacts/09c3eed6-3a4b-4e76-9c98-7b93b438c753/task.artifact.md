@@ -1,7 +1,9 @@
 # Task List
 
-- [x] Update `gradle/libs.versions.toml` with Kotlin version and library plugins
-- [x] Create `app/consumer-rules.pro` and `app/proguard-rules.pro`
-- [x] Replace `app/build.gradle.kts` with `com.android.library` and `maven-publish` setup
+- [x] Integrate SQLite Database (`ChatDatabaseHelper.kt`) for local chat persistence
+- [x] Create `AiProvider.kt` with multi-AI provider support (Gemini, ChatGPT, DeepSeek, DuckDuckGo Free AI)
+- [x] Create `UserAgentManager.kt` for random device identity rotation on session reset
+- [x] Update `activity_main.xml` with Top Toolbar (Provider Spinner + Clear Chat button)
+- [x] Update `ChatAdapter.kt` with "Thinking..." loading item state & long-press Copy/Share context menu
+- [x] Update `MainActivity.kt` with database persistence, response preparation polling, and session refresh
 - [x] Perform `gradle_build` (`app:assembleRelease`) - Build finished successfully!
-- [x] Git add & commit (`Fix: maven-publish for JitPack`)

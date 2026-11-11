@@ -7,12 +7,41 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/layoutTopBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:background="#EDE7F6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Spinner
+            android:id="@+id/spinnerProvider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="4dp" />
+
+        <Button
+            android:id="@+id/buttonClearChat"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear Chat"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
     <WebView
         android:id="@+id/webViewGemini"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutTopBar"
         app:layout_constraintBottom_toTopOf="@id/layoutBottomBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -24,7 +53,7 @@
         android:clipToPadding="false"
         android:padding="8dp"
         android:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutTopBar"
         app:layout_constraintBottom_toTopOf="@id/layoutBottomBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -46,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:drawable/editbox_background_normal"
-            android:hint="Ask Gemini..."
+            android:hint="Ask AI..."
             android:padding="12dp"
             android:maxLines="4"
             android:inputType="textLongMessage|textMultiLine" />
