@@ -1,6 +1,10 @@
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("maven-publish")
 }
 
 android {
@@ -8,13 +12,15 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.chatwithgiminibypass"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
     }
 
     buildTypes {
@@ -35,6 +41,16 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+}
+
+afterEvaluate {
+    extensions.configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+            }
+        }
     }
 }
 
