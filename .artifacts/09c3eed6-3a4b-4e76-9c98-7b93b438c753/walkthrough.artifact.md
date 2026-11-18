@@ -1,11 +1,11 @@
-# Walkthrough - Fixing Keyboard Insets Overlay Issue
+# Walkthrough - Reverting to Clean `innerText` Scraping
 
-We have updated the window insets listener in `MainActivity.kt` to include `WindowInsetsCompat.Type.ime()` (the software keyboard height). When the keyboard opens, the layout correctly adjusts and pushes the bottom input bar above the keyboard instead of being hidden underneath it.
+We have reverted the background scraper from `innerHTML` back to `innerText` to prevent raw HTML tags and unicode escape sequences (`\u003Cspan...`) from appearing in the chat bubbles. Responses are now clean and human-readable.
 
 ## Changes
 
 ### Activity & Logic
-- **[MainActivity.kt](file:///C:/Users/Awais/AndroidStudioProjects/ChatWithGiminiBypass/app/src/main/java/com/example/chatwithgiminibypass/MainActivity.kt)**: Included `imeInsets` in `setOnApplyWindowInsetsListener` to ensure proper bottom padding adjustment when the keyboard opens.
+- **[MainActivity.kt](file:///C:/Users/Awais/AndroidStudioProjects/ChatWithGiminiBypass/app/src/main/java/com/example/chatwithgiminibypass/MainActivity.kt)**: Updated `scrapeJs` to extract `contentEl.innerText`, ensuring clean plain text responses without raw HTML tags.
 
 ## Verification Results
 
